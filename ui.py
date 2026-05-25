@@ -157,7 +157,7 @@ def criar_contato():
     telefone = input("Digite telefone: ")
     if not logic.validar_telefone(telefone):
         print(
-            f"{'\nTelefone inválido inválido! (para cancelar, deixe todos os campos em branco)':^{espaco}}\n"
+            f"{'\nTelefone inválido! (para cancelar, deixe todos os campos em branco)':^{espaco}}\n"
         )
         return None
 
