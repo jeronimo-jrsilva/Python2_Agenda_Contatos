@@ -64,10 +64,11 @@ def apresentar_secao(secao) -> None:
 
 # Serve para, na inicialização (ou sempre que recarregarmos
 # o menu principal), recalcular o número de contatos na agenda.
-# Também calcula os parâmetros de formatação.
+# Também calcula os parâmetros de formatação e organiza os contatos.
 def inicializar_agenda() -> None:
     global espaco, espacinho, separador, entradas
     campos, lista_contatos = arquivo.desmembrar()
+    arquivo.reconstruir_agenda(campos, lista_contatos)
     # Quantidade de contatos na agenda:
     entradas = len(lista_contatos)
 
@@ -75,7 +76,7 @@ def inicializar_agenda() -> None:
     if not lista_contatos:
         espacinho = [15, 15, 10]
         espaco = sum(espacinho) + 2
-        
+
     else:
         maiores = [len(c) for c in campos]
         for linha in lista_contatos:
@@ -141,17 +142,23 @@ def mostrar_agenda() -> None:
 def criar_contato():
     nome = input("Digite nome: ")
     if not logic.validar_nome(nome):
-        print(f"{'\nNome inválido! (para cancelar, deixe todos os campos em branco)':^{espaco}}\n")
+        print(
+            f"{'\nNome inválido! (para cancelar, deixe todos os campos em branco)':^{espaco}}\n"
+        )
         return None
 
     email = input("Digite email: ")
     if not logic.validar_email(email):
-        print(f"{'\nEmail inválido! (para cancelar, deixe todos os campos em branco)':^{espaco}}\n")
+        print(
+            f"{'\nEmail inválido! (para cancelar, deixe todos os campos em branco)':^{espaco}}\n"
+        )
         return None
 
     telefone = input("Digite telefone: ")
     if not logic.validar_telefone(telefone):
-        print(f"{'\nTelefone inválido inválido! (para cancelar, deixe todos os campos em branco)':^{espaco}}\n")
+        print(
+            f"{'\nTelefone inválido inválido! (para cancelar, deixe todos os campos em branco)':^{espaco}}\n"
+        )
         return None
 
     # Caso o usuário deixe todos os campos vazios,
