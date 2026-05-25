@@ -1,4 +1,5 @@
 # Jeronimo Silva
-from ui import *
+from ui import main
+
 # Roda o programa
 main()
