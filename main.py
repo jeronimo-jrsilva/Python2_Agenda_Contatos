@@ -1,4 +1,4 @@
 # Jeronimo Silva
 from ui import *
-# Roda o programaa
+# Roda o programa
 main()
