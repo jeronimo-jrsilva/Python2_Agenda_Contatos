@@ -1,5 +1,6 @@
 # Jeronimo Silva
-from ui import main
+# PROGRAMA PRINCIPAL / EXECUTÁVEL
+from ui import main  # importa a função principal da interface do usuário
 
 # Roda o programa
 main()

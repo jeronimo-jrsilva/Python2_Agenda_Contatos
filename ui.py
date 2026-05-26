@@ -1,8 +1,13 @@
 # Jeronimo Silva
-import os
+# INTERFACE
 
-import arquivo
-import contatos as logic
+import arquivo  # manipulação de arquivos CSV
+import contatos as logic  # operações sobre os contatos
+
+# import os
+import subprocess
+import sys
+
 
 # ---- Parâmetros de exibição (Herança do jero_aux) ----
 
@@ -110,7 +115,7 @@ def mostrar_lista(lista) -> None:
             bloco = lista[i : i + limite]
 
             # Exibe os contatos deste bloco específico
-            os.system("cls")
+            limpar_tela()
             print(f"\n{'Contato(s) encontrado(s):':^{espaco}}")
             print(separador)
             for linha in bloco:
@@ -250,10 +255,15 @@ def sobre() -> None:
         f"Obrigado!\n"
     )
 
+def limpar_tela():
+    # Limpa a tela com o comando 'clear' para macOS/Linux, 'cls' para Windows
+    command = 'clear' if sys.platform != 'win32' else 'cls'
+    subprocess.run(command, shell=True)
+
 
 # Cardápio em francês
 def menu() -> None:
-    os.system("cls")
+    limpar_tela()
     inicializar_agenda()
     apresentar_secao("Menu")
     msg = f"Número de contatos: {entradas}"
@@ -280,16 +290,16 @@ def main() -> None:
         opcao = input()
         match opcao:
             case "1":
-                os.system("cls")
+                limpar_tela()
                 mostrar_agenda()
             case "2":
-                os.system("cls")
+                limpar_tela()
                 # Seção de busca, chama funções mais específicas para fazer o trabalho pesado.
                 apresentar_secao("Buscar contato")
                 termo = input("Digite o termo a pesquisar: ")
                 mostrar_lista(arquivo.lista_achados(termo))
             case "3":
-                os.system("cls")
+                limpar_tela()
                 # Seção correspondente.
                 apresentar_secao("Criar contato")
                 repete = True
@@ -310,7 +320,7 @@ def main() -> None:
                     else:
                         repete = True  # Erro de validação, repete
             case "4":
-                os.system("cls")
+                limpar_tela()
                 # Mermo igual.
                 apresentar_secao("Atualizar contato")
                 termo = input("Digite o nome para buscar e atualizar: ")
@@ -330,7 +340,7 @@ def main() -> None:
                     contatos.append(novos_dados)
                     arquivo.reconstruir_agenda(campos, contatos)
             case "5":
-                os.system("cls")
+                limpar_tela()
                 # Ditto.
                 apresentar_secao("Remover contato")
                 termo = input("Digite o termo para buscar e remover: ")
@@ -350,14 +360,14 @@ def main() -> None:
                     print(f"\n{'Contato removido:':^{espaco}}\n")
                     print(f"{eliminar.title():^{espaco}}")
             case "6":
-                os.system("cls")
+                limpar_tela()
                 # Mostra (alguns dos) bugs conhecidos, e os créditos.
                 sobre()
             case "c":
                 muda_cor()
                 print("\nEsquema de cores alterado.\n")
             case _:
-                os.system("cls")
+                limpar_tela()
                 apresentar_secao("Agenda encerrada")
                 break
         input("\n[Pressione Enter para voltar ao menu]")
