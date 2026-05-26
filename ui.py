@@ -1,18 +1,18 @@
 # Jeronimo Silva
 # INTERFACE
 
-import arquivo  # manipulação de arquivos CSV
-import contatos as logic  # operações sobre os contatos
-
 # import os
 import subprocess
 import sys
 
+import arquivo  # manipulação de arquivos CSV
+import contatos as logic  # operações sobre os contatos
+
 # Observação:
 # Tentei deixar a tipagem explícita, ao menos em relação
-# às funções (retorno). Pensei isso no último dia, e 
+# às funções (retorno). Pensei isso no último dia, e
 # alterar também os parâmetros e as variáveis daria trabalho
-#  demais e poderia introduzir erros (coisa que não quero 
+#  demais e poderia introduzir erros (coisa que não quero
 # horas antes da apresentação)
 
 # ---- Parâmetros de exibição (Herança do jero_aux) ----
@@ -24,6 +24,7 @@ separador = ""  # Separa seções verticalmene
 entradas = 0  # número total de contatos na agenda
 limite = 20  # limite de contatos exibidos de uma vez
 cor = True
+
 
 # Interruptor que alterna entre True e False, colorindo ou não
 # certas partes da interface.
@@ -196,7 +197,8 @@ def criar_contato() -> str | None | list:
 # Mostra (alguns dos) bugs conhecidos, e os créditos.
 def sobre() -> None:
     global separador
-    apresentar_secao("Erros Conhecidos")
+    msg = "Alguns dos erros conhecidos"
+    apresentar_secao(msg)
 
     # Lista contendo os erros conhecidos:
     erros = [
@@ -226,7 +228,7 @@ def sobre() -> None:
     # Passa pelos erros exibindo um por um
     for i, erro in enumerate(erros, start=1):
         limpar_tela()
-        apresentar_secao("Erros conhecidos")
+        apresentar_secao(msg)
         print(erro)
         print("")
         print(separador)
@@ -277,12 +279,13 @@ def sobre() -> None:
         f"Obrigado!\n"
     )
 
+
 def limpar_tela() -> None:
     # Limpa a tela com o comando 'clear' para macOS/Linux, 'cls' para Windows
     # Poderia usar 'os.system('cls')' mas não funcionaria no Linux (parte do
     # programa foi feita no Linux). Além disso, o Pyright (type checker do Zed)
     # reclama sobre 'os.system' mas funciona corretamente.
-    command = 'clear' if sys.platform != 'win32' else 'cls'
+    command = "clear" if sys.platform != "win32" else "cls"
     subprocess.run(command, shell=True)
 
 
@@ -314,16 +317,16 @@ def main() -> None:
         print(f"{'Insira uma opção: ':^{espaco}}")
         opcao = input()
         match opcao:
-            case "1": # Mostrar agenda
+            case "1":  # Mostrar agenda
                 limpar_tela()
                 mostrar_agenda()
-            case "2": # Buscar contato
+            case "2":  # Buscar contato
                 limpar_tela()
                 # Seção de busca, chama funções mais específicas para fazer o trabalho pesado.
                 apresentar_secao("Buscar contato")
                 termo = input("Digite o termo a pesquisar: ")
                 mostrar_lista(arquivo.lista_achados(termo))
-            case "3": # Criar contato
+            case "3":  # Criar contato
                 limpar_tela()
                 # Seção correspondente.
                 apresentar_secao("Criar contato")
@@ -344,7 +347,7 @@ def main() -> None:
                         repete = False
                     else:
                         repete = True  # Erro de validação, repete
-            case "4": # Atualizar contato
+            case "4":  # Atualizar contato
                 limpar_tela()
                 # Mermo igual.
                 apresentar_secao("Atualizar contato")
@@ -364,7 +367,7 @@ def main() -> None:
                     ]
                     contatos.append(novos_dados)
                     arquivo.reconstruir_agenda(campos, contatos)
-            case "5": # Remover contato
+            case "5":  # Remover contato
                 limpar_tela()
                 # Ditto.
                 apresentar_secao("Remover contato")
@@ -384,7 +387,7 @@ def main() -> None:
                     arquivo.reconstruir_agenda(campos, novos_contatos)
                     print(f"\n{'Contato removido:':^{espaco}}\n")
                     print(f"{eliminar.title():^{espaco}}")
-            case "6": # Sobre
+            case "6":  # Sobre
                 limpar_tela()
                 # Mostra (alguns dos) bugs conhecidos, e os créditos.
                 sobre()
