@@ -10,7 +10,8 @@ ARQUIVO_AGENDA = "agenda.csv"
 # Separa o arquivo de agenda em cabeçalho e contatos.
 # Remove contatos vazios ou sem nome
 # Organiza os contatos alfabeticamente.
-def desmembrar():
+def desmembrar() -> tuple:  # Retorna um tuple com o cabeçalho e os contatos limpos.
+                            # Não entendi pq tupla, só aceitei.
     with open(ARQUIVO_AGENDA, "r", newline="", encoding="utf-8") as agenda:
         reader = csv.reader(agenda, delimiter=",")
         tudao = list(reader)
@@ -27,18 +28,17 @@ def desmembrar():
 
 
 # Une cabeçalho e contatos para gerar um arquivo de agenda.
-def reconstruir_agenda(campos, contatos):
+def reconstruir_agenda(campos, contatos) -> None:
     contatos = sorted(contatos)  # Organiza os contatos alfabeticamente.
     with open(ARQUIVO_AGENDA, "w", encoding="utf-8", newline="") as agenda:
         writer = csv.writer(agenda, delimiter=",")
         writer.writerow(campos)
         writer.writerows(contatos)
-    return len(contatos)
 
 
 # Pesquisa um termo no CSV e retorna uma lista dos encontrados.
 # O termo pode estar em qualquer campo.
-def lista_achados(termo):
+def lista_achados(termo) -> list:
     termo = termo.lower()
     achados = []
     # List comprehension funcional (tendi p***a nenhuma)

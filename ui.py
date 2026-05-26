@@ -8,6 +8,12 @@ import contatos as logic  # operações sobre os contatos
 import subprocess
 import sys
 
+# Observação:
+# Tentei deixar a tipagem explícita, ao menos em relação
+# às funções (retorno). Pensei isso no último dia, e 
+# alterar também os parâmetros e as variáveis daria trabalho
+#  demais e poderia introduzir erros (coisa que não quero 
+# horas antes da apresentação)
 
 # ---- Parâmetros de exibição (Herança do jero_aux) ----
 
@@ -19,14 +25,16 @@ entradas = 0  # número total de contatos na agenda
 limite = 20  # limite de contatos exibidos de uma vez
 cor = True
 
-
-def muda_cor():
+# Interruptor que alterna entre True e False, colorindo ou não
+# certas partes da interface.
+def muda_cor() -> None:
     global cor
     cor = not cor
 
 
 def colorir(texto, c1=(0, 255, 255), c2=(255, 0, 255)) -> str:
-    """Aplica um degradê True Color ANSI entre duas cores RGB."""
+    # Aplica um degradê True Color ANSI entre duas cores RGB.
+
     # Não entendi, só aceitei. Tem a ver com RBG, e com uma taxa
     # de incremento, aplicada a cada caracter.
     res = ""
@@ -148,11 +156,12 @@ def mostrar_agenda() -> None:
 
 
 # Insere contato na agenda, obedecendo regras de validação
-# Pode retornar:
-# CANCEL - se o usuário cancelar a operação (deixando todos os campos em branco)
+# Pode retornar 3 tipos diferentes:
+# CANCEL (string) - se o usuário cancelar a operação
+#   (deixando todos os campos em branco)
 # None - se o contato não for válido (alguma das funções de validação retornar False)
 # list - se o contato for válido (organizadinho como no resto da agenda)
-def criar_contato():
+def criar_contato() -> str | None | list:
     nome = input("Digite nome: ")
     if not logic.validar_nome(nome):
         print(
@@ -206,19 +215,30 @@ def sobre() -> None:
         "    telefonia móvel brasileira, mas não telefones fixos,\n"
         "    números estrangeiros, ou números emergenciais ou \n"
         "    especiais.",
+        "5 - A agenda também não permite números no campo nome,\n"
+        "    inviabilizando contatos tipo:\n\n"
+        "    Namorada\n"
+        "    Namorada2\n"
+        "    Namorada3\n"
+        "    ...",
     ]
 
     # Passa pelos erros exibindo um por um
     for i, erro in enumerate(erros, start=1):
+        limpar_tela()
+        apresentar_secao("Erros conhecidos")
         print(erro)
+        print("")
         print(separador)
         # Se não for o último erro, pede ENTER para o próximo. Se for o último, avança para os créditos.
         if i < len(erros):
+            print("")
             input("Pressione ENTER para ler o próximo erro... ")
-            print("\n")
+            print("")
         else:
+            print("")
             input("Pressione ENTER para ver os créditos do sistema... ")
-            print("\n")
+            print("")
 
     # --- Seção de Créditos ---
     c1 = (0, 255, 255)  # Ciano
@@ -230,7 +250,7 @@ def sobre() -> None:
     telefone = f"{'(85) 9 9129 2744':^{espaco}}"
     email = f"{'shaolin.jr@gmail.com':^{espaco}}"
     github = f"{'https://github.com/jeronimo-jrsilva':^{espaco}}"
-    professor = f"{'Msc. Nator Júnior Carvalho da Costa':^{espaco}}"
+    professor = f"{'M.Sc. Nator Júnior Carvalho da Costa':^{espaco}}"
     disciplina = f"{'Lógica de programação':^{espaco}}"
 
     # Colorindo geral:
@@ -242,6 +262,8 @@ def sobre() -> None:
         professor = f"{colorir(professor, c3, c2)}"
 
     # Impressão limpa (visto que as variáveis já estão centralizadas e coloridas)
+    limpar_tela()
+    apresentar_secao("Créditos")
     print(
         f"Desenvolvido por:\n"
         f"{aluno}\n"
@@ -255,8 +277,11 @@ def sobre() -> None:
         f"Obrigado!\n"
     )
 
-def limpar_tela():
+def limpar_tela() -> None:
     # Limpa a tela com o comando 'clear' para macOS/Linux, 'cls' para Windows
+    # Poderia usar 'os.system('cls')' mas não funcionaria no Linux (parte do
+    # programa foi feita no Linux). Além disso, o Pyright (type checker do Zed)
+    # reclama sobre 'os.system' mas funciona corretamente.
     command = 'clear' if sys.platform != 'win32' else 'cls'
     subprocess.run(command, shell=True)
 
@@ -289,16 +314,16 @@ def main() -> None:
         print(f"{'Insira uma opção: ':^{espaco}}")
         opcao = input()
         match opcao:
-            case "1":
+            case "1": # Mostrar agenda
                 limpar_tela()
                 mostrar_agenda()
-            case "2":
+            case "2": # Buscar contato
                 limpar_tela()
                 # Seção de busca, chama funções mais específicas para fazer o trabalho pesado.
                 apresentar_secao("Buscar contato")
                 termo = input("Digite o termo a pesquisar: ")
                 mostrar_lista(arquivo.lista_achados(termo))
-            case "3":
+            case "3": # Criar contato
                 limpar_tela()
                 # Seção correspondente.
                 apresentar_secao("Criar contato")
@@ -319,7 +344,7 @@ def main() -> None:
                         repete = False
                     else:
                         repete = True  # Erro de validação, repete
-            case "4":
+            case "4": # Atualizar contato
                 limpar_tela()
                 # Mermo igual.
                 apresentar_secao("Atualizar contato")
@@ -339,7 +364,7 @@ def main() -> None:
                     ]
                     contatos.append(novos_dados)
                     arquivo.reconstruir_agenda(campos, contatos)
-            case "5":
+            case "5": # Remover contato
                 limpar_tela()
                 # Ditto.
                 apresentar_secao("Remover contato")
@@ -359,7 +384,7 @@ def main() -> None:
                     arquivo.reconstruir_agenda(campos, novos_contatos)
                     print(f"\n{'Contato removido:':^{espaco}}\n")
                     print(f"{eliminar.title():^{espaco}}")
-            case "6":
+            case "6": # Sobre
                 limpar_tela()
                 # Mostra (alguns dos) bugs conhecidos, e os créditos.
                 sobre()
