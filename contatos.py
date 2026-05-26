@@ -1,6 +1,7 @@
 # Jeronimo Silva
 import re
 
+
 def validar_nome(nome) -> bool:
     if not nome:
         return True
@@ -23,6 +24,7 @@ def validar_nome(nome) -> bool:
     # O "and name" serve para considerar apenas os nomes não vazios.
     return bool(re.match(padrao, nome))
 
+
 def validar_email(email) -> bool:
     if not email:
         return True
@@ -41,6 +43,7 @@ def validar_email(email) -> bool:
     # O "and email" serve para considerar apenas os nomes não vazios.
     return bool(re.match(padrao, email))
 
+
 def validar_telefone(telefone) -> bool:
     if not telefone:
         return True
@@ -54,6 +57,7 @@ def validar_telefone(telefone) -> bool:
         return False
     # se tem 11 dígitos OU é vazio, retorna verdadeiro.
     return True
+
 
 # Deveria estar na parte da formatação, mas preferi deixar aqui.
 # Formata os números telefônicos digitados.

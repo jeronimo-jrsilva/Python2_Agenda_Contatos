@@ -1,4 +1,6 @@
 # Jeronimo Silva
+import os
+
 import arquivo
 import contatos as logic
 
@@ -97,11 +99,10 @@ def contato_unico(linha: list[str]) -> None:
 
 # Mostra contatos que obedecem a um critério de busca
 def mostrar_lista(lista) -> None:
+    continuar = ""
     if not lista:
         print(f"\n{'Nenhum contato encontrado':^{espaco}}")
     else:
-        print(f"\n{'Contato(s) encontrado(s):':^{espaco}}\n")
-
         # O range vai de 0 até o tamanho da lista, pulando
         # conforme o 'limite' definido lá no início.
         for i in range(0, len(lista), limite):
@@ -109,17 +110,25 @@ def mostrar_lista(lista) -> None:
             bloco = lista[i : i + limite]
 
             # Exibe os contatos deste bloco específico
+            os.system("cls")
+            print(f"\n{'Contato(s) encontrado(s):':^{espaco}}")
+            print(separador)
             for linha in bloco:
                 contato_unico(linha)
 
             # Checando se ainda há próximos itens
             if i + limite < len(lista):
                 # Ajustado '{i + 1}' para a contagem humana começar do 1 (ex: Exibindo 1 a 20)
-                input(
-                    f"\nExibindo {i + 1} a {i + len(bloco)} de {len(lista)}. Pressione ENTER para ver os próximos\n"
+                continuar = input(
+                    f"\n\nExibindo {i + 1} a {i + len(bloco)} de {len(lista)}\n"
+                    f"Pressione ENTER para ver os próximos\n"
+                    f"ou o 'c' seguido de ENTER para cancelar\n\n"
                 )
+                if continuar == "c":
+                    break
                 # Isso é outra coisa que aprendi nesse trabalho: um input "vazio", não atribuído a uma variável,
                 # pode ser utilizado como uma pausa com continuação manual (enter). Irado!
+        print(separador)
 
 
 # Mostra a agenda inteira.
@@ -131,7 +140,6 @@ def mostrar_agenda() -> None:
     contato_unico(campos)
     print(f"{'':-^{espaco}}")
     mostrar_lista(lista_contatos)
-    print(separador)
 
 
 # Insere contato na agenda, obedecendo regras de validação
@@ -188,12 +196,11 @@ def sobre() -> None:
         "    Achei mais direto fazer assim, mas entendo que não\n"
         "    seja eficiente. Ainda assim, preferi experimentar\n"
         "    dessa forma.",
-        "4 - A agenda funciona para números de telefonia\n"
-        "    móvel brasileiros sem DDI. Números fixos (10\n"
-        "    algarismos com DDD) ou números internacionais\n"
-        "    (iniciados por '+', e com quantidade de algarismos\n"
-        "    variando conforme o país) são rejeitados pelo filtro\n"
-        "    regex.",
+        "4 - A agenda comporta telefones com um total de 11 dígitos,\n"
+        "    nada mais, nada menos. Portanto, comporta números da\n"
+        "    telefonia móvel brasileira, mas não telefones fixos,\n"
+        "    números estrangeiros, ou números emergenciais ou \n"
+        "    especiais.",
     ]
 
     # Passa pelos erros exibindo um por um
@@ -246,6 +253,7 @@ def sobre() -> None:
 
 # Cardápio em francês
 def menu() -> None:
+    os.system("cls")
     inicializar_agenda()
     apresentar_secao("Menu")
     msg = f"Número de contatos: {entradas}"
@@ -272,13 +280,16 @@ def main() -> None:
         opcao = input()
         match opcao:
             case "1":
+                os.system("cls")
                 mostrar_agenda()
             case "2":
+                os.system("cls")
                 # Seção de busca, chama funções mais específicas para fazer o trabalho pesado.
                 apresentar_secao("Buscar contato")
                 termo = input("Digite o termo a pesquisar: ")
                 mostrar_lista(arquivo.lista_achados(termo))
             case "3":
+                os.system("cls")
                 # Seção correspondente.
                 apresentar_secao("Criar contato")
                 repete = True
@@ -299,6 +310,7 @@ def main() -> None:
                     else:
                         repete = True  # Erro de validação, repete
             case "4":
+                os.system("cls")
                 # Mermo igual.
                 apresentar_secao("Atualizar contato")
                 termo = input("Digite o nome para buscar e atualizar: ")
@@ -318,6 +330,7 @@ def main() -> None:
                     contatos.append(novos_dados)
                     arquivo.reconstruir_agenda(campos, contatos)
             case "5":
+                os.system("cls")
                 # Ditto.
                 apresentar_secao("Remover contato")
                 termo = input("Digite o termo para buscar e remover: ")
@@ -337,12 +350,14 @@ def main() -> None:
                     print(f"\n{'Contato removido:':^{espaco}}\n")
                     print(f"{eliminar.title():^{espaco}}")
             case "6":
+                os.system("cls")
                 # Mostra (alguns dos) bugs conhecidos, e os créditos.
                 sobre()
             case "c":
                 muda_cor()
                 print("\nEsquema de cores alterado.\n")
             case _:
+                os.system("cls")
                 apresentar_secao("Agenda encerrada")
                 break
         input("\n[Pressione Enter para voltar ao menu]")
